@@ -2,33 +2,40 @@
 # A makefile is a script used by the make build system which helps compile and link your program.
 # It helps manage dependencies and makes it easy to compile your programs.
 
-# Define the compiler
+# Compiler
 CXX = g++
 
-# Define compiler flags
+# Compiler flags
 CXXFLAGS = -Wall -g
 
-# Define the target executable
-TARGET = bashBuddies
+# Include directories
+INCLUDES = -IC:/DevTools/curl-win64-latest/curl-8.9.1_3-win64-mingw/include -Iinclude
 
-# Define source files
-SRCS = src/main.cpp
+# Library directories
+LIBDIRS = -LC:/DevTools/curl-win64-latest/curl-8.9.1_3-win64-mingw/lib
 
-# Define object files
-OBJS = $(SRCS:.cpp=.o)
+# Libraries
+LIBS = -lcurl
 
-# Default rule to build the target executable
-all: $(TARGET)
+# Source files
+SOURCES = src/main.cpp src/weather.cpp
 
-# Link the object files to create the executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+# Object files
+OBJECTS = $(SOURCES:.cpp=.o)
 
-# Compile each .cpp file to .o file
+# Executable name
+EXECUTABLE = bashBuddies
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(LIBDIRS) -o $@ $^ $(LIBS)
+
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-# Clean up build files
 clean:
-	rm -f $(TARGET) $(OBJS)
+	rm -f $(OBJECTS) $(EXECUTABLE)
+
+
 
